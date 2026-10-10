@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SwiftUI
 
 public enum AppThemeType: String, CaseIterable {
     case light = "Light"
@@ -23,6 +24,31 @@ public enum AppThemeType: String, CaseIterable {
         default: return .unspecified
         }
     }
+    
+    public var colorScheme: ColorScheme? {
+        switch self {
+        case .light: return .light
+        case .dark, .amoled: return .dark
+        default: return nil
+        }
+    }
+}
+
+public extension AppThemeColors {
+    var primaryColor: Color { Color(primary) }
+    var secondaryColor: Color { Color(secondary) }
+    var backgroundColor: Color { Color(background) }
+    var cardColor: Color { Color(card) }
+    var elevatedCardColor: Color { Color(elevatedCard) }
+    var textColor: Color { Color(text) }
+    var secondaryTextColor: Color { Color(secondaryText) }
+    var separatorColor: Color { Color(separator) }
+    var successColor: Color { Color(success) }
+    var warningColor: Color { Color(warning) }
+    var dangerColor: Color { Color(danger) }
+    var incomeColor: Color { Color(income) }
+    var expenseColor: Color { Color(expense) }
+    var accentColor: Color { Color(accent) }
 }
 
 public protocol AppThemeColors {
@@ -163,12 +189,27 @@ public struct HighContrastColors: AppThemeColors {
 
 // MARK: - Centralized Theme Manager
 
-public class ThemeManager {
+public class ThemeManager: ObservableObject {
     public static let shared = ThemeManager()
     
     private let themeKey = "BudgetTracker_SelectedTheme"
     
-    public private(set) var currentTheme: AppThemeType
+    @Published public var currentTheme: AppThemeType {
+        didSet {
+            UserDefaults.standard.set(currentTheme.rawValue, forKey: themeKey)
+            NotificationCenter.default.post(name: .themeDidChange, object: nil)
+            
+            DispatchQueue.main.async {
+                for scene in UIApplication.shared.connectedScenes {
+                    if let windowScene = scene as? UIWindowScene {
+                        for window in windowScene.windows {
+                            window.overrideUserInterfaceStyle = self.currentTheme.userInterfaceStyle
+                        }
+                    }
+                }
+            }
+        }
+    }
     
     private init() {
         let savedTheme = UserDefaults.standard.string(forKey: themeKey) ?? AppThemeType.light.rawValue

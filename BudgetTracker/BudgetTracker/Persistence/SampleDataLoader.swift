@@ -13,6 +13,10 @@ public class SampleDataLoader {
     
     private init() {}
     
+    public func loadSampleDataIfEmpty() {
+        loadRealisticSampleData()
+    }
+    
     public func loadRealisticSampleData() {
         let coreData = CoreDataManager.shared
         coreData.deleteAllData()
@@ -26,7 +30,7 @@ public class SampleDataLoader {
         // 1. Accounts
         let cashAcc = accountManager.createAccount(name: "Cash Wallet", type: .cash, initialBalance: 350.0, isDefault: true)
         let checkingAcc = accountManager.createAccount(name: "Chase Checking", type: .bank, initialBalance: 4250.0, isDefault: false)
-        let savingsAcc = accountManager.createAccount(name: "Marcus High Yield", type: .savings, initialBalance: 8500.0, isDefault: false)
+        _ = accountManager.createAccount(name: "Marcus High Yield", type: .savings, initialBalance: 8500.0, isDefault: false)
         let creditAcc = accountManager.createAccount(name: "Apple Card", type: .creditCard, initialBalance: -450.0, isDefault: false)
         
         let calendar = Calendar.current

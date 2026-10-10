@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="23000" systemVersion="23F81a" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="AccountEntity" representedClassName="AccountEntity" syncable="YES">
+        <attribute name="balance" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="createdAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="isDefault" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="type" optional="YES" attributeType="String"/>
+    </entity>
+    <entity name="BudgetEntity" representedClassName="BudgetEntity" syncable="YES">
+        <attribute name="alert50Enabled" attributeType="Boolean" defaultValueString="YES" usesScalarValueType="YES"/>
+        <attribute name="alert75Enabled" attributeType="Boolean" defaultValueString="YES" usesScalarValueType="YES"/>
+        <attribute name="alert90Enabled" attributeType="Boolean" defaultValueString="YES" usesScalarValueType="YES"/>
+        <attribute name="category" optional="YES" attributeType="String"/>
+        <attribute name="createdAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="limit" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="month" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+    </entity>
+    <entity name="DebtEntity" representedClassName="DebtEntity" syncable="YES">
+        <attribute name="createdAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="debtType" optional="YES" attributeType="String"/>
+        <attribute name="dueDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="interestRate" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="minimumPayment" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="remainingAmount" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="totalAmount" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+    </entity>
+    <entity name="RecurringTransactionEntity" representedClassName="RecurringTransactionEntity" syncable="YES">
+        <attribute name="accountId" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="amount" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="category" optional="YES" attributeType="String"/>
+        <attribute name="createdAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="frequency" optional="YES" attributeType="String"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="isEnabled" attributeType="Boolean" defaultValueString="YES" usesScalarValueType="YES"/>
+        <attribute name="nextDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="title" optional="YES" attributeType="String"/>
+        <attribute name="type" optional="YES" attributeType="String"/>
+    </entity>
+    <entity name="SavingsGoalEntity" representedClassName="SavingsGoalEntity" syncable="YES">
+        <attribute name="createdAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="currentAmount" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="deadline" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="icon" optional="YES" attributeType="String"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="targetAmount" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+    </entity>
+    <entity name="TransactionEntity" representedClassName="TransactionEntity" syncable="YES">
+        <attribute name="accountId" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="amount" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="category" optional="YES" attributeType="String"/>
+        <attribute name="createdAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="isRecurring" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="merchant" optional="YES" attributeType="String"/>
+        <attribute name="note" optional="YES" attributeType="String"/>
+        <attribute name="paymentMethod" optional="YES" attributeType="String"/>
+        <attribute name="receiptImagePath" optional="YES" attributeType="String"/>
+        <attribute name="recurringRule" optional="YES" attributeType="String"/>
+        <attribute name="title" optional="YES" attributeType="String"/>
+        <attribute name="transferToAccountId" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="type" optional="YES" attributeType="String"/>
+    </entity>
+</model>

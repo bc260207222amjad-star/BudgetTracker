@@ -65,6 +65,10 @@ public class AccountManager {
         return (try? coreData.viewContext.fetch(request)) ?? []
     }
     
+    public func getAllAccounts() -> [AccountEntity] {
+        return fetchAccounts()
+    }
+    
     public func getAccount(byId id: UUID) -> AccountEntity? {
         let request = NSFetchRequest<AccountEntity>(entityName: "AccountEntity")
         request.predicate = NSPredicate(format: "id == %@", id as CVarArg)

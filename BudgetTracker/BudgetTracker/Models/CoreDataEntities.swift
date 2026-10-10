@@ -11,7 +11,7 @@ import CoreData
 // MARK: - Transaction Entity
 
 @objc(TransactionEntity)
-public class TransactionEntity: NSManagedObject {
+public class TransactionEntity: NSManagedObject, Identifiable {
     @NSManaged public var id: UUID?
     @NSManaged public var amount: Double
     @NSManaged public var type: String? // "income", "expense", "transfer"
@@ -51,7 +51,7 @@ public enum TransactionType: String, CaseIterable, Codable {
 // MARK: - Budget Entity
 
 @objc(BudgetEntity)
-public class BudgetEntity: NSManagedObject {
+public class BudgetEntity: NSManagedObject, Identifiable {
     @NSManaged public var id: UUID?
     @NSManaged public var name: String?
     @NSManaged public var category: String? // nil means overall monthly budget
@@ -70,7 +70,7 @@ public class BudgetEntity: NSManagedObject {
 // MARK: - Savings Goal Entity
 
 @objc(SavingsGoalEntity)
-public class SavingsGoalEntity: NSManagedObject {
+public class SavingsGoalEntity: NSManagedObject, Identifiable {
     @NSManaged public var id: UUID?
     @NSManaged public var name: String?
     @NSManaged public var targetAmount: Double
@@ -92,7 +92,7 @@ public class SavingsGoalEntity: NSManagedObject {
 // MARK: - Account Entity
 
 @objc(AccountEntity)
-public class AccountEntity: NSManagedObject {
+public class AccountEntity: NSManagedObject, Identifiable {
     @NSManaged public var id: UUID?
     @NSManaged public var name: String?
     @NSManaged public var type: String? // "Cash", "Bank", "Savings", "Credit Card", "Investment", "Custom"
@@ -124,7 +124,7 @@ public enum AccountType: String, CaseIterable {
 // MARK: - Recurring Transaction Entity
 
 @objc(RecurringTransactionEntity)
-public class RecurringTransactionEntity: NSManagedObject {
+public class RecurringTransactionEntity: NSManagedObject, Identifiable {
     @NSManaged public var id: UUID?
     @NSManaged public var title: String?
     @NSManaged public var amount: Double
@@ -170,7 +170,7 @@ public enum RecurringFrequency: String, CaseIterable {
 // MARK: - Debt Entity
 
 @objc(DebtEntity)
-public class DebtEntity: NSManagedObject {
+public class DebtEntity: NSManagedObject, Identifiable {
     @NSManaged public var id: UUID?
     @NSManaged public var name: String?
     @NSManaged public var totalAmount: Double

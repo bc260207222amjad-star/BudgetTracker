@@ -7,7 +7,8 @@
 
 import Foundation
 
-public struct CurrencyInfo: Codable, Equatable {
+public struct CurrencyInfo: Codable, Equatable, Identifiable, Hashable {
+    public var id: String { code }
     public let code: String
     public let symbol: String
     public let name: String
@@ -25,22 +26,34 @@ public struct CurrencyInfo: Codable, Equatable {
         CurrencyInfo(code: "INR", symbol: "₹", name: "Indian Rupee"),
         CurrencyInfo(code: "CHF", symbol: "CHF ", name: "Swiss Franc")
     ]
+    
+    public static var popularCurrencies: [CurrencyInfo] {
+        supportedCurrencies
+    }
 }
 
-public class CurrencyManager {
+public typealias CurrencyModel = CurrencyInfo
+
+public class CurrencyManager: ObservableObject {
     public static let shared = CurrencyManager()
     
     private let currencyKey = "BudgetTracker_SelectedCurrencyCode"
     
-    private init() {}
+    @Published public var currentCurrency: CurrencyInfo {
+        didSet {
+            UserDefaults.standard.set(currentCurrency.code, forKey: currencyKey)
+            NotificationCenter.default.post(name: .currencyDidChange, object: nil)
+        }
+    }
     
-    public var currentCurrency: CurrencyInfo {
+    private init() {
         let code = UserDefaults.standard.string(forKey: currencyKey) ?? Locale.current.currency?.identifier ?? "USD"
-        return CurrencyInfo.supportedCurrencies.first(where: { $0.code == code }) ?? CurrencyInfo(code: "USD", symbol: "$", name: "US Dollar")
+        self.currentCurrency = CurrencyInfo.supportedCurrencies.first(where: { $0.code == code }) ?? CurrencyInfo(code: "USD", symbol: "$", name: "US Dollar")
     }
     
     public func setCurrency(code: String) {
         UserDefaults.standard.set(code, forKey: currencyKey)
+        self.currentCurrency = CurrencyInfo.supportedCurrencies.first(where: { $0.code == code }) ?? CurrencyInfo(code: "USD", symbol: "$", name: "US Dollar")
         NotificationCenter.default.post(name: .currencyDidChange, object: nil)
     }
     

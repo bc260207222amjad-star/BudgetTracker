@@ -27,6 +27,10 @@ public class ExportManager {
     
     // MARK: - CSV Export
     
+    public func exportTransactionsCSV() -> URL? {
+        return generateCSV(transactions: TransactionManager.shared.getAllTransactions())
+    }
+    
     public func generateCSV(transactions: [TransactionEntity]) -> URL? {
         var csvString = "Date,Type,Amount,Category,Merchant,Payment Method,Note\n"
         

@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SwiftUI
 
 public struct CategoryItem: Codable, Hashable {
     public let id: String
@@ -24,8 +25,12 @@ public struct CategoryItem: Codable, Hashable {
         self.isCustom = isCustom
     }
     
-    public var color: UIColor {
+    public var uiColor: UIColor {
         return UIColor(hex: colorHex) ?? .systemBlue
+    }
+    
+    public var color: Color {
+        return Color(uiColor)
     }
 }
 
@@ -57,6 +62,14 @@ public class CategoryManager {
     ]
     
     private init() {}
+    
+    public var expenseCategories: [CategoryItem] {
+        return getExpenseCategories()
+    }
+    
+    public var incomeCategories: [CategoryItem] {
+        return getIncomeCategories()
+    }
     
     public func getExpenseCategories() -> [CategoryItem] {
         let custom = loadCustomCategories().filter { !$0.isIncome }

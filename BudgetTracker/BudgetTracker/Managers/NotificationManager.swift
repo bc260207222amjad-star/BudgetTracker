@@ -15,8 +15,53 @@ public class NotificationManager {
     private let billRemindersKey = "BudgetTracker_Notifications_BillReminders"
     private let savingsRemindersKey = "BudgetTracker_Notifications_SavingsReminders"
     private let monthlyReportsKey = "BudgetTracker_Notifications_MonthlyReports"
+    private let dailyReminderKey = "BudgetTracker_Notifications_DailyReminder"
+    private let reminderTimeKey = "BudgetTracker_Notifications_ReminderTime"
     
     private init() {}
+    
+    public func isDailyReminderEnabled() -> Bool {
+        return UserDefaults.standard.bool(forKey: dailyReminderKey)
+    }
+    
+    public func getReminderTime() -> Date {
+        if let time = UserDefaults.standard.object(forKey: reminderTimeKey) as? Date {
+            return time
+        }
+        var comps = DateComponents()
+        comps.hour = 20
+        comps.minute = 0
+        return Calendar.current.date(from: comps) ?? Date()
+    }
+    
+    public func isBudgetAlertsEnabled() -> Bool {
+        return budgetAlertsEnabled
+    }
+    
+    public func setDailyReminder(enabled: Bool, at time: Date) {
+        UserDefaults.standard.set(enabled, forKey: dailyReminderKey)
+        UserDefaults.standard.set(time, forKey: reminderTimeKey)
+        
+        let center = UNUserNotificationCenter.current()
+        center.removePendingNotificationRequests(withIdentifiers: ["DailyLoggingReminder"])
+        
+        guard enabled else { return }
+        
+        let content = UNMutableNotificationContent()
+        content.title = "Daily Budget Reminder"
+        content.body = "Don't forget to log today's expenses and track your financial progress!"
+        content.sound = .default
+        
+        let calendar = Calendar.current
+        let comps = calendar.dateComponents([.hour, .minute], from: time)
+        let trigger = UNCalendarNotificationTrigger(dateMatching: comps, repeats: true)
+        let request = UNNotificationRequest(identifier: "DailyLoggingReminder", content: content, trigger: trigger)
+        center.add(request)
+    }
+    
+    public func setBudgetAlerts(enabled: Bool) {
+        budgetAlertsEnabled = enabled
+    }
     
     // MARK: - Permission
     

@@ -8,7 +8,8 @@
 import Foundation
 import CoreData
 
-public struct TransactionGroup {
+public struct TransactionGroup: Identifiable {
+    public var id: String { title }
     public let title: String
     public let date: Date
     public var transactions: [TransactionEntity]
@@ -20,6 +21,10 @@ public struct TransactionGroup {
     public var totalIncome: Double {
         return transactions.filter { $0.type == TransactionType.income.rawValue }.reduce(0) { $0 + $1.amount }
     }
+    
+    public var netTotal: Double {
+        return totalIncome - totalExpense
+    }
 }
 
 public struct FinancialSummary {
@@ -28,6 +33,20 @@ public struct FinancialSummary {
     public let totalExpenses: Double
     public let totalSavings: Double
     public let savingsRate: Double // e.g. 0.43 for 43%
+    
+    public init(
+        totalBalance: Double = 0,
+        totalIncome: Double = 0,
+        totalExpenses: Double = 0,
+        totalSavings: Double = 0,
+        savingsRate: Double = 0
+    ) {
+        self.totalBalance = totalBalance
+        self.totalIncome = totalIncome
+        self.totalExpenses = totalExpenses
+        self.totalSavings = totalSavings
+        self.savingsRate = savingsRate
+    }
 }
 
 public class TransactionManager {
@@ -158,6 +177,10 @@ public class TransactionManager {
     }
     
     // MARK: - Querying & Filtering
+    
+    public func getAllTransactions() -> [TransactionEntity] {
+        return fetchTransactions()
+    }
     
     public func fetchTransactions(
         type: TransactionType? = nil,
@@ -363,6 +386,34 @@ public class TransactionManager {
         }
         
         coreData.saveContext()
+    }
+    
+    @discardableResult
+    public func createRecurringTransaction(
+        title: String,
+        amount: Double,
+        type: TransactionType = .expense,
+        category: String,
+        frequency: String = "monthly",
+        startDate: Date = Date(),
+        accountId: UUID? = nil
+    ) -> RecurringTransactionEntity {
+        let context = coreData.viewContext
+        let entity = RecurringTransactionEntity(context: context)
+        entity.id = UUID()
+        entity.title = title
+        entity.amount = amount
+        entity.type = type.rawValue
+        entity.category = category
+        entity.frequency = frequency.lowercased()
+        entity.nextDate = startDate
+        entity.isEnabled = true
+        entity.createdAt = Date()
+        entity.accountId = accountId
+        
+        coreData.saveContext()
+        NotificationCenter.default.post(name: .transactionsDidChange, object: nil)
+        return entity
     }
 }
 

@@ -24,7 +24,7 @@ public enum LockTimeout: Int, CaseIterable {
     }
 }
 
-public class BiometricAuthManager {
+public class BiometricAuthManager: ObservableObject {
     public static let shared = BiometricAuthManager()
     
     private let biometricsEnabledKey = "BudgetTracker_BiometricsEnabled"
@@ -32,7 +32,7 @@ public class BiometricAuthManager {
     private let hideBalanceKey = "BudgetTracker_HideBalance"
     private let hideAmountsKey = "BudgetTracker_HideTransactionAmounts"
     
-    public private(set) var isLocked: Bool = false
+    @Published public var isLocked: Bool = false
     private var lastBackgroundDate: Date?
     
     private var blurEffectView: UIVisualEffectView?
@@ -48,6 +48,7 @@ public class BiometricAuthManager {
     public var isBiometricsEnabled: Bool {
         get { UserDefaults.standard.bool(forKey: biometricsEnabledKey) }
         set {
+            objectWillChange.send()
             UserDefaults.standard.set(newValue, forKey: biometricsEnabledKey)
             if !newValue {
                 isLocked = false
@@ -56,12 +57,18 @@ public class BiometricAuthManager {
         }
     }
     
+    public var isBiometricAuthEnabled: Bool {
+        get { isBiometricsEnabled }
+        set { isBiometricsEnabled = newValue }
+    }
+    
     public var lockTimeout: LockTimeout {
         get {
             let seconds = UserDefaults.standard.integer(forKey: lockTimeoutKey)
             return LockTimeout(rawValue: seconds) ?? .immediately
         }
         set {
+            objectWillChange.send()
             UserDefaults.standard.set(newValue.rawValue, forKey: lockTimeoutKey)
             NotificationCenter.default.post(name: .securitySettingsDidChange, object: nil)
         }
@@ -70,6 +77,7 @@ public class BiometricAuthManager {
     public var hideBalance: Bool {
         get { UserDefaults.standard.bool(forKey: hideBalanceKey) }
         set {
+            objectWillChange.send()
             UserDefaults.standard.set(newValue, forKey: hideBalanceKey)
             NotificationCenter.default.post(name: .privacyDisplayDidChange, object: nil)
         }
@@ -78,6 +86,7 @@ public class BiometricAuthManager {
     public var hideTransactionAmounts: Bool {
         get { UserDefaults.standard.bool(forKey: hideAmountsKey) }
         set {
+            objectWillChange.send()
             UserDefaults.standard.set(newValue, forKey: hideAmountsKey)
             NotificationCenter.default.post(name: .privacyDisplayDidChange, object: nil)
         }
